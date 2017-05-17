@@ -1,10 +1,7 @@
 /* 
-PrimerServidorTCP.c
-   Servicio: Las cadenas de texto recibidas de un Cliente son   
-             enviadas a la salida estándar.
-   Nota: Por simplicidad del código no se realiza ningún tipo de 
-  control de errores. No obstante el servidor es totalmente
-  funcional.
+
+  2)Modifique el servidor para que no finalice y guardelo como Server1.c
+
 */
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -12,7 +9,7 @@ PrimerServidorTCP.c
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>//se va los warning de close y write
+#include <unistd.h>
 
 #define PORTNUMBER  12345
 
@@ -31,11 +28,18 @@ int main(void){
     len = sizeof(struct sockaddr_in);
     bind(s, (struct sockaddr *) &direcc, len);
     listen(s, 5);
-    ns = accept(s, (struct sockaddr *) &direcc, &len);
-
-    while ((n = recv(ns, buf, sizeof(buf), 0)) > 0)
-        write(1, buf, n);
+    
+    
+    while(1){//bucle infinito para que el servidor no se cierre cuando el cliente cierre la conexión.
+		 ns = accept(s, (struct sockaddr *) &direcc, &len);
+		 while ((n = recv(ns, buf, sizeof(buf), 0)) > 0){//cuando el valor de "n"=0, significa que el cliente cerró la conexión. Menor a 0, error.
+			  write(1, buf, n);
+		 }    
+		 close(ns);  
+		
+	}  
          
-    close(ns); close(s);
+    close(s);
     exit(0);
 }
+
