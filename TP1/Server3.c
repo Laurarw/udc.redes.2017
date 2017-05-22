@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <arpa/inet.h>
 
 #define PORTNUMBER  12345
 
@@ -31,11 +32,13 @@ int main(void){
     direcc.sin_addr.s_addr = htonl(INADDR_ANY);
 
     len = sizeof(struct sockaddr_in);
+     printf("Conectando con %s:%d\n", inet_ntoa(direcc.sin_addr),htons(direcc.sin_port));
     bind(s, (struct sockaddr *) &direcc, len);
     listen(s, 5);
     
     
     while(1){
+		printf("Conectando con %s:%d\n", inet_ntoa(direcc.sin_addr),htons(direcc.sin_port));
 		 ns = accept(s, (struct sockaddr *) &direcc, &len);
 		 atender_cliente(ns);
 		 close(ns);  
