@@ -24,10 +24,11 @@ void sig_chld(int signo);
 
 int main(void){
     
-    int s, ns, len,proceso;
+    int s, ns, len,proceso,a;
     struct sockaddr_in direcc;
    
     s = socket(AF_INET, SOCK_STREAM, 0);
+    if(s!=-1)printf("socket");
 
     bzero((char *) &direcc, sizeof(direcc));
     direcc.sin_family = AF_INET;
@@ -35,13 +36,15 @@ int main(void){
     direcc.sin_addr.s_addr = htonl(INADDR_ANY);
 
     len = sizeof(struct sockaddr_in);
-    bind(s, (struct sockaddr *) &direcc, len);
-    listen(s, 5);
+    a=bind(s, (struct sockaddr *) &direcc, len);
     
+    listen(s, 5);
+    //printf("algo");
     signal(SIGCHLD, sig_chld);
     
     while(1){
 		 ns = accept(s, (struct sockaddr *) &direcc, &len);
+		 
 		 
 		 proceso=fork();//crea procesos hijos
 		 switch(proceso){
@@ -74,7 +77,7 @@ void atender_cliente(int socket){
 	char buf[11];
 	int n;
 	 while ((n = recv(socket, buf, sizeof(buf), 0)) > 0){
-			  write(socket, buf, n); //en vez de 1 como primer parametro de write, se envia el socket.
+			  write(socket, &buf, n); //en vez de 1 como primer parametro de write, se envia el socket.
 		 }    
 }
 /*

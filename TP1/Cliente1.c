@@ -11,15 +11,16 @@ int main(int argc , char *argv[])
 {
     int sock;
     struct sockaddr_in server;
-    char message[1000] , server_reply[2000];
-     
+    char server_reply[2000];
+    
+		char message[1000];
     //Create socket
     sock = socket(AF_INET , SOCK_STREAM , 0);
     if (sock == -1)
     {
-        printf("Could not create socket");
+        printf("No se puede crear el socket");
     }
-    puts("Socket created");
+    puts("Socket creado");
      
     server.sin_addr.s_addr = htonl(INADDR_ANY);
     server.sin_family = AF_INET;
@@ -28,34 +29,39 @@ int main(int argc , char *argv[])
     //Connect to remote server
     if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)
     {
-        perror("connect failed. Error");
+        perror("Falló Conexion. Error");
         return 1;
     }
-     
-    puts("Connected\n");
-     
+     int u;
+    puts("Conectado\n");
+     char cadena[50]; 
     //keep communicating with server
     while(1)
     {
-        printf("Enter message : ");
+		 
+        printf("Ingresar Mensaje : ");
         scanf("%s" , message);
          
         //Send some data
         if( send(sock , message , strlen(message) , 0) < 0)
         {
-            puts("Send failed");
+            puts("Falló el envio");
             return 1;
         }
+        //read(sock,&cadena,strlen(cadena));
+        //read(sock,&cadena,sizeof(cadena));//aca manda todo pero no borra lo anterior
          
         //Receive a reply from the server
-        /*if( recv(sock , server_reply , 2000 , 0) < 0)
+        if( (u=recv(sock , &cadena , sizeof(cadena) , 0)) < 0)
         {
-            puts("recv failed");
+            puts("recv falló");
             break;
         }
-         
-        puts("Server reply :");
-        puts(server_reply);*/
+         cadena[u]='\0';
+       
+        puts(cadena);
+         //puts("Server reply :");
+        // printf("\n\nCadena enviada= %s \n", cadena);
     }
      
     close(sock);

@@ -32,7 +32,7 @@ int main(void){
     direcc.sin_addr.s_addr = htonl(INADDR_ANY);
 
     len = sizeof(struct sockaddr_in);
-     printf("Conectando con %s:%d\n", inet_ntoa(direcc.sin_addr),htons(direcc.sin_port));
+    printf("Conectando con %s:%d\n", inet_ntoa(direcc.sin_addr),htons(direcc.sin_port));
     bind(s, (struct sockaddr *) &direcc, len);
     listen(s, 5);
     
@@ -57,7 +57,7 @@ void atender_cliente(int socket){
 	char buf[11];
 	int n;
 	 while ((n = recv(socket, buf, sizeof(buf), 0)) > 0){
-			  write(socket, buf, n); //en vez de 1 como primer parametro de write, se envia el socket.
+			  write(socket, &buf, n); //en vez de 1 como primer parametro de write, se envia el socket.
 		 }    
 }
 

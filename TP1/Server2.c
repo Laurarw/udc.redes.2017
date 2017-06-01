@@ -20,7 +20,8 @@ void atender_cliente(int socket);
 
 int main(void){
     //char buf[10];
-    int s, ns, len;
+   char buf[10];
+    int s, n, ns, len;
     struct sockaddr_in direcc;
    
     s = socket(AF_INET, SOCK_STREAM, 0);
@@ -36,6 +37,7 @@ int main(void){
     
     
     while(1){
+		
 		 ns = accept(s, (struct sockaddr *) &direcc, &len);
 		 atender_cliente(ns);//función
 		 close(ns);  
@@ -50,11 +52,11 @@ int main(void){
  No devuelve nada.
  * */
 void atender_cliente(int socket){
-	char buf[11];
+	char buf[10];
 	int n;
-	 while ((n = recv(socket, buf, sizeof(buf), 0)) > 0){
+	 while ((n = recv(socket, buf, sizeof(buf), 0)) > 0){//cuando el valor de "n"=0, significa que el cliente cerró la conexión. Menor a 0, error.
 			  write(1, buf, n);
-		 }    
+		 }      
 }
 
 
