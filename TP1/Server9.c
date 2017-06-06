@@ -1,95 +1,62 @@
-/* 
+/*11)Transformar el Server3.c, en un servidor iterativo de Eco con UDP y guardelo como Server9.c. 
+ * Cree el cliente correspondiente y guardelo como  Cliente4.c.
 
-  11)Transformar el Server3.c, en un servidor iterativo de Eco con UDP y guardelo como Server9.c. 
-  Cree el cliente correspondiente y guardelo como  Cliente4.c.
+ * */
 
-
-
-*/
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 #include <arpa/inet.h>
-/*
- *
+#include <sys/socket.h>
 
+#define BUFF 100
+#define PUERTO 12345
 
+struct sockaddr_in si_me, si_other;
 
+void service(int s){
+	int slen = sizeof(si_other), recv_len;
+	char buf[BUFF];
+	
+		printf("Esperando por datos... =)\n");
+		fflush(stdout);
 
-#include <unistd.h>
-#include <ctype.h>
-#include <signal.h>
- * */
-
-#define PORTNUMBER  12345
-
-void atender_cliente(int socket,struct sockaddr_in Cliente, int longitudCliente,struct sockaddr_in direcc);
+		if ((recv_len = recvfrom(s, buf, BUFF, 0, (struct sockaddr *) &si_other, &slen)) == -1)
+		{
+			exit (1);
+		}
+		
+		printf("Datos : %s\n", buf );
+		
+		//--- ECO 
+		if(sendto(s, buf, recv_len, 0, (struct sockaddr*) &si_other, slen) == -1){
+			exit (1);
+		}
+	
+}
 
 int main(void){
-  
- int s, ns, len,p;
-    struct sockaddr_in direcc;
-   struct sockaddr_in Cliente;
-   int longitudCliente = sizeof(Cliente);
-   //SOCK_DGRAM para protocolo UDP
-    s = socket(AF_INET, SOCK_DGRAM, 0);
-
-    bzero((char *) &direcc, sizeof(direcc));
-    direcc.sin_family = AF_INET;
-    direcc.sin_port = htons(PORTNUMBER);
-    direcc.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    len = sizeof(struct sockaddr_in);
-    
-    printf("Creando socket ....\n");
-    p=bind(s, (struct sockaddr *) &direcc, len);
-    if(p==-1){
-		perror("bind hhh");
-		exit(1);
-	}
- 
-
-   // listen(s, 5);
-    
-    
-    while(1){
-		 //ns = accept(s, (struct sockaddr *) &direcc, &len);
-		  
-		 atender_cliente(s,Cliente,longitudCliente,direcc);
-		 //close(ns);  
-		// close(s);
-	}  
-         
-    close(s);
-    exit(0);
-}
-/*
- Atiende la petición del cliente.
- Función que recibe como parámetro el socket en el que se conecta el cliente.
- No devuelve nada.
- * */
-void atender_cliente(int socket,struct sockaddr_in Cliente, int longitudCliente,struct sockaddr_in direcc){
-	char buf[11];
 	
-    
-	int n;
-	//printf("Conectando con %s:%d\n", inet_ntoa(Cliente.sin_addr),htons(Cliente.sin_port));
-	printf("Esperando datos ....\n");
+	int s;	
 	
-	if((n=recvfrom(socket,(char *) buf, sizeof(buf), 0, (struct sockaddr *)&Cliente, &longitudCliente)) >0){
-			//perror("recvfrom");
- //exit(1);
-  printf("paquete proveniente de : %s||puerto: %d\n ",inet_ntoa(Cliente.sin_addr),htons(Cliente.sin_port));
-  printf("el paquete contiene : %s\n", buf);
+	//Creación de socket UDP
+	if((s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1){
+			exit (1);
+		}
+		
+	memset((char *) &si_me, 0, sizeof(si_me));
+	
+	si_me.sin_family = AF_INET;
+	si_me.sin_port = htons(PUERTO);
+	si_me.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if(bind(s, (struct sockaddr*)&si_me, sizeof(si_me)) == -1){
+		exit (1);
 	}
-	  
-		 
+	
+	//printf("-----  Servidor UDP   -----\n");
+	while(1){
+		service(s);
+	}
+	return 0;
 }
-
-
-
-

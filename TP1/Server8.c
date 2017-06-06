@@ -1,6 +1,6 @@
 /* 
 
-  8)Modificar el Server7.c para que utilice estructuras en vez de texto plano y guardelo como Server8.c. 
+  10)Modificar el Server7.c para que utilice estructuras en vez de texto plano y guardelo como Server8.c. 
   * Cree el cliente correspondiente y guardelo como  Cliente3.c
 
 
@@ -23,7 +23,7 @@
 	char num1[100];
 	char num2[100];
 	long int resultado;
-} __attribute__ ((__packed__)) s_suma;
+} s_suma;
  
 #define PORTNUMBER  12345
 
@@ -94,7 +94,7 @@ void atender_cliente(int socket){
 			//la funcion determina si es valido o no lo que el cliente mandó
 			   if((esNumero(suma.num1) == -1) || (esNumero(suma.num1) == -1)){//si no lo es se le manda el error
 				//snprintf guarda en el array (respuesta) el string formado.  
-				snprintf(respuesta,sizeof(respuesta),"Error.Ingreso: %s, %s. Solo se permiten numeros enteros",num1,num2);
+				snprintf(respuesta,sizeof(respuesta),"Error.Ingreso: %s, %s. Solo se permiten numeros enteros",suma.num1,suma.num2);
 				write(socket,respuesta, sizeof(respuesta));//mando respuesta
 				   
 			  }else{//si son ambos validos, lo convierten a int con atoi para sumarlos
@@ -102,10 +102,13 @@ void atender_cliente(int socket){
 				  int resp;
 				   numero1=atol(suma.num1);
 			       numero2=atol(suma.num2);
-				  suma.resultado=numero1+numero2;				  
+			   
+				  suma.resultado=numero1+numero2;	
+			
 				  write(socket,&suma,sizeof(s_suma));
 			
 			  }
+			   
 		  
 		 }    
 }

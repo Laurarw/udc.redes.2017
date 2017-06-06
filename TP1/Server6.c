@@ -1,8 +1,7 @@
 /* 
 
-  7)Transformar el Server3.c, en un servidor concurrente usando fork() 
-  y guardelo como Server5.c.
-
+  8)Modificar el Server5.c para que espere por la finalización de sus 
+  * hijos para evitar los procesos zombies y guardelo como Server6.c.
 
 
 */
@@ -39,7 +38,9 @@ int main(void){
     a=bind(s, (struct sockaddr *) &direcc, len);
     
     listen(s, 5);
-    //printf("algo");
+    //con la función signal se establece un gestor de señales para el número de la señal(primer parámetro).
+    //SIGCHLD es la señal enviada a un proceso cuando uno de sus procesos hijos termina
+    //sig_chld función
     signal(SIGCHLD, sig_chld);
     
     while(1){
@@ -80,14 +81,12 @@ void atender_cliente(int socket){
 			  write(socket, &buf, n); //en vez de 1 como primer parametro de write, se envia el socket.
 		 }    
 }
-/*
-  Agregar informacion
- * 
- * */
+
 void sig_chld(int signo){
 	pid_t	pid;
 	int	stat;
-
+//Lo que devuelve waitpid es el ID del proceso hijo que termina o 0 en caso de no terminar ningún
+//proceso, -1 en caso de error.
 	while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0)
 		printf("   Hijo %d ha terminado\n", pid);
 	return;

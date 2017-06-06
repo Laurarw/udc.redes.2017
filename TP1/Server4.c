@@ -1,7 +1,9 @@
+
 /* 
 
-  4)Modifique y Server2.c para que preste el servicio de echo (vea RFC862) 
-  y guardelo como Server3.c
+  4)Modifique Server3.c para que preste el servicio de character generator (vea RFC864) 
+  * y guardelo como Server4.c
+
 
 
 
@@ -16,7 +18,8 @@
 #include <arpa/inet.h>
 
 #define PORTNUMBER  12345
-//funciones
+#define LINELEN 111
+
 int atender_cliente(int socket);
 
 int main(void){
@@ -31,7 +34,7 @@ int main(void){
     direcc.sin_port = htons(PORTNUMBER);
     direcc.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    len = sizeof(struct sockaddr_in);    
+    len = sizeof(struct sockaddr_in);
     bind(s, (struct sockaddr *) &direcc, len);
     listen(s, 5);
     
@@ -39,9 +42,10 @@ int main(void){
     while(1){
 		printf("Conectando con %s:\t%d\n", inet_ntoa(direcc.sin_addr),htons(direcc.sin_port));
 		 ns = accept(s, (struct sockaddr *) &direcc, &len);
-		 atender_cliente(ns);
-		 close(ns);  
+		atender_cliente(ns);
 		
+			   close(ns);
+	
 	}  
          
     close(s);
@@ -53,13 +57,15 @@ int main(void){
  No devuelve nada.
  * */
 int atender_cliente(int socket){
-	char buf[11];
-	int n;
-
 	
-	 while ((n = read(socket, buf, sizeof(buf))) > 0){
-			  write(socket, &buf, n); //en vez de 1 como primer parametro de write, se envia el socket.
-		 }  
+    while (1) {//bucle infinito mandando la cadena @algo hasta que el cliente cierra la conexión
+      
+        if (write(socket, "@algo", 4) < 0)
+            break;
+    }
+    
+    return 0;
+    
 }
 
 

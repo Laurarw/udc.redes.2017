@@ -1,60 +1,86 @@
-#include <stdio.h> //printf
-#include <string.h>    //strlen
-#include <sys/socket.h>    //socket
-#include <arpa/inet.h> //inet_addr
-#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+
+#define BUFF 100
+
+#define SERVER "127.0.0.1"
+#define PUERTO 12345 
+struct sockaddr_in si_other;
 
 
-#define PORTNUMBER  12345
 
-int main(int argc , char *argv[])
+
+void enviarMsj(int s){
+
+	char buf[BUFF];
+	char message[BUFF];
+
+	int slen = sizeof(si_other);
+		
+		message[0] = '\0';
+		printf("Ingrese mensaje: \n");
+		
+		gets(message);
+
+		//Envio de msj.
+		if(sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == -1){
+			exit(1);
+		}
+		memset(buf, '\0', BUFF);
+
+		if (recvfrom(s, buf, BUFF, 0, (struct sockaddr *) &si_other, &slen) == -1)
+		{
+			exit(1);
+		}
+
+		puts(buf);
+	}
+
+
+int main(void)
 {
-    int sock;
-    struct sockaddr_in server;
-    char message[1000] , server_reply[2000];
-     int longitudCliente = sizeof(server);
-    //Create socket
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sock == -1)
-    {
-        printf("Could not create socket");
-    }
-    puts("Socket created");
-     
-    server.sin_addr.s_addr = htonl(INADDR_ANY);
-    server.sin_family = AF_INET;
-    server.sin_port = htons( PORTNUMBER );
- bzero(&(server.sin_zero), 8);
-   
-     
-    puts("Connected\n");
-     
-    //keep communicating with server
-    while(1)
-    {
-        printf("Enter message : ");
-        scanf("%s" , message);
-         
-        //Send some data
-        if( (sendto (sock, (char *)&message, sizeof(message), 0, (struct sockaddr *)&server, longitudCliente)) < 0)
-        {
-            puts("Send failed");
-            return 1;
-        }
-         
-        //Receive a reply from the server
-        /*if( recv(sock , server_reply , 2000 , 0) < 0)
-        {
-            puts("recv failed");
-            break;
-        }
-         */
-        //puts("Server reply :");
-        //puts(server_reply);
-        
-    }
-      close(sock);
-   
-    return 0;
-}
+	char buf[BUFF];
+	char message[BUFF];
+	
+	int s, slen = sizeof(si_other);
+	
+		if((s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1){
+			exit (1);
+		}
+	
+	
+	memset((char *) &si_other, 0, sizeof(si_other));
+	si_other.sin_family = AF_INET;
+	si_other.sin_port = htons(PUERTO);
 
+	if(inet_aton(SERVER, &si_other.sin_addr) == 0){
+		fprintf(stderr, "inet_aton() FALLO!!!\n" );
+		exit(1);
+	}
+
+	while(1){
+		
+		
+		printf("Ingrese mensaje: \n");
+		gets(message);
+
+		//Envio de msj.
+		if(sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == -1){
+			
+			exit(1);
+		}
+
+		if (recvfrom(s, buf, BUFF, 0, (struct sockaddr *) &si_other, &slen) == -1)
+		{
+	
+			exit(1);
+		}
+
+		puts(buf);
+	}
+
+	return 0;
+}

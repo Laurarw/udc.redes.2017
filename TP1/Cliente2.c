@@ -13,7 +13,7 @@ int main(int argc , char *argv[])
     struct sockaddr_in server;
     char message[1000] , server_reply[2000];
      
-    //Create socket
+    //Crear socket
     sock = socket(AF_INET , SOCK_STREAM , 0);
     if (sock == -1)
     {
@@ -33,18 +33,22 @@ int main(int argc , char *argv[])
     }
      
     puts("Conectado\n");
-    //char num1[81], num2[81];
-    //mantener la comunicación con el server
+  
+    
     char cadena[50]; 
     int u,nBytes;
     char num1[81], num2[81],respuesta[60];
+    //mantener la comunicación con el server
     while(1)
     {
-		puts("Ingrese dos numeros enteros separados por un espacio menores a 2147483647. Ej: 4 4");
+		
+		  //2147483647
+		puts("Ingrese dos numeros enteros separados por un espacio . Ej: 4 4");
         printf("Números: ");
       
         fgets(message,sizeof(message),stdin);
-		//printf("You typed: %s",message);
+
+		
 
 		nBytes = strlen(message);//acá estaba el +1
 
@@ -53,7 +57,7 @@ int main(int argc , char *argv[])
 		u=recv(sock, message, sizeof(message), 0);
 		message[u]='\0';
 
-		printf("La respuesta es: %s\n\n",message);   
+		printf("Respuesta del server: %s\n\n",message);   
 			
        
        

@@ -10,7 +10,7 @@
 	char num1[100];
 	char num2[100];
 	long int resultado;
-}__attribute__ ((__packed__)) s_suma;
+} s_suma;
 
 #define PORTNUMBER  12345
 
@@ -50,12 +50,16 @@ int main(int argc , char *argv[])
     
     while(1)
     {
-		puts("Ingrese dos numeros enteros separados por un espacio menores a 2147483647. Ej: 4 4");
+		 //se limpian cadenas
+			  memset(suma.num1,'\0',strlen(suma.num1));
+		      memset(suma.num2,'\0',strlen(suma.num2));
+		puts("Ingrese dos numeros enteros separados por un espacio. La falta de uno de ellos se toma como cero . Ej: 4 4");	
         printf("Números: ");
       
         fgets(message,sizeof(message),stdin);
 		
 		sscanf( message,"%s %s", suma.num1, suma.num2 );
+		printf("\n%s + %s\n", suma.num1, suma.num2);
 	
 		
 		write (sock, &suma, sizeof(s_suma));

@@ -1,6 +1,6 @@
 /* 
 
-  7)Modificar el Server6.c para que cambie el servicio 
+  9)Modificar el Server6.c para que cambie el servicio 
   * por uno que devuelva la suma de dos parámetros enteros o una leyenda de error en parámetros 
   * si estos no son enteros y guardelo como Server7.c. 
   * Tips: Usar la función sscanf() y snprintf(). 
@@ -80,32 +80,32 @@ void atender_cliente(int socket){
 	char buf[111];
 	int n;
 	char num1[81], num2[81],respuesta[600];
-	int numero1,numero2;
-	char error[]="Numeros no enteros";
-	int nb1,nb2,suma;
+	int numero1,numero2,suma;
+	
 	
 	 while ((n = recv(socket, buf, sizeof(buf), 0)) > 0){//si o si sizeof para que pase el buff completo
 			  
 			  buf[n]='\0';//se le agrega el null acá porque sino te manda la basura que queda del array
 			  sscanf( buf,"%s %s", num1, num2 );// las palabras separadas por espacios se le asignaran a las variables num1 y num2 respectivamente
-			  puts(num1);
-			  puts(num2);
-			 		  
-			//la funcion determina si es valido o no lo que el cliente mandó
+						 		  
+			//la funcion esNumero determina si es valido o no lo que el cliente mandó
 			   if((esNumero(num1) == -1) || (esNumero(num1) == -1)){//si no lo es se le manda el error
 				//snprintf guarda en el array (respuesta) el string formado.  
 				snprintf(respuesta,sizeof(respuesta),"Error.Ingreso: %s, %s. Solo se permiten numeros enteros",num1,num2);
 				write(socket,respuesta, sizeof(respuesta));//mando respuesta
 				   
 			  }else{//si son ambos validos, lo convierten a int con atoi para sumarlos
-				   numero1=atol(num1);
-			       numero2=atol(num2);
+				   numero1=atoi(num1);
+			       numero2=atoi(num2);
 				  suma=numero1+numero2;
 				  snprintf(respuesta,sizeof(respuesta),"%d + %d = %d",numero1,numero2,suma);//lo mismo que lo anterior: armo la respuesta a mandar
 				  write(socket,respuesta, strlen(respuesta));
 				  
 				
 			  }
+			  //se limpian cadenas
+			  memset(num1,'\0',strlen(num1));
+		      memset(num2,'\0',strlen(num2));
 		  
 		 }    
 }
