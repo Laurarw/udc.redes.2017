@@ -59,7 +59,7 @@ int main(int argc , char *argv[])
         fgets(message,sizeof(message),stdin);
 		
 		sscanf( message,"%s %s", suma.num1, suma.num2 );
-		printf("\n%s + %s\n", suma.num1, suma.num2);
+		//printf("\n%s + %s\n", suma.num1, suma.num2);
 	
 		
 		write (sock, &suma, sizeof(s_suma));
