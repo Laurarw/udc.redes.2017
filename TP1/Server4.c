@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <errno.h>
+#include <signal.h>
 
 #define PORTNUMBER  12345
 #define LINELEN 111
@@ -36,6 +38,13 @@ int main(void){
 
     len = sizeof(struct sockaddr_in);
     bind(s, (struct sockaddr *) &direcc, len);
+    /*
+     *Write largara el errno SIGPIPE, si se esta escribiendo en un socket que lee(cliente) y este se cierra, 
+     * esto ocaciona que el proceso se termine.Por lo que se debe explicitar que se ignore SIGPIPE, de esta manera 
+     * write() retornará el error -1 y errno será igual a EPIPE.
+     * 
+     * */
+    signal(SIGPIPE, SIG_IGN);
     listen(s, 5);
     
     
@@ -57,15 +66,23 @@ int main(void){
  No devuelve nada.
  * */
 int atender_cliente(int socket){
-	
-    while (1) {//bucle infinito mandando la cadena @algo hasta que el cliente cierra la conexión
-      
-        if (write(socket, "@algo", 4) < 0)
+	char    c, buf[LINELEN+2];    /* mostrar LINELEN chars + \r\n */
+
+    c = ' ';
+    buf[LINELEN] = '\r';
+    buf[LINELEN+1] = '\n';
+    while (1) {
+        int    i;
+
+        for (i=0; i<LINELEN; ++i) {
+            buf[i] = c++;
+            if (c > '~')
+                c = ' ';
+        }
+        if (write(socket, buf, LINELEN+2) < 0)
             break;
     }
-    
     return 0;
-    
 }
 
 

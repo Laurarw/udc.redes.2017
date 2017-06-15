@@ -20,17 +20,24 @@
  
  typedef struct Suma
 {
-	char num1[100];
-	char num2[100];
-	long int resultado;
+	int num1;
+	int num2;
+	int resultado;
+	int flag;//-1 si no es valido. 0 si es valido
+	char mje_error[100];
 } s_suma;
  
 #define PORTNUMBER  12345
 
+/*DECLARACIÓN DE FUNCIONES
+ * */
 void atender_cliente(int socket);
 void sig_chld(int signo);
 int esNumero(char string[]);
 
+/*
+ * BLOQUE MAIN
+ * */
 int main(void){
     
     int s, ns, len,proceso;
@@ -90,25 +97,25 @@ void atender_cliente(int socket){
 	 s_suma suma;
 
 	 while ((n = recv(socket, &suma, sizeof(s_suma), 0)) > 0){//si o si sizeof para que pase el buff completo
-			 			 		  
-			//la funcion determina si es valido o no lo que el cliente mandó
-			   if((esNumero(suma.num1) == -1) || (esNumero(suma.num1) == -1)){//si no lo es se le manda el error
-				//snprintf guarda en el array (respuesta) el string formado.  
-				snprintf(respuesta,sizeof(respuesta),"Error.Ingreso: %s, %s. Solo se permiten numeros enteros",suma.num1,suma.num2);
-				write(socket,respuesta, sizeof(respuesta));//mando respuesta
-				   
-			  }else{//si son ambos validos, lo convierten a int con atoi para sumarlos
-				  //s_suma aux;
-				  int resp;
-				   numero1=atol(suma.num1);
-			       numero2=atol(suma.num2);
-			   
-				  suma.resultado=numero1+numero2;	
-			
-				  write(socket,&suma,sizeof(s_suma));
-			
-			  }
-			   
+		 /*BLOQUE DE FLAG= -1(ERROR) 0(VALIDO)
+		  */
+		  
+		 if(suma.flag==-1){
+			 //snprintf guarda en el array (respuesta) el string formado. 
+			  	snprintf(suma.mje_error,sizeof(suma.mje_error),"Solo se permiten numeros enteros");
+				suma.num1=0;
+				suma.num2=0;
+				suma.flag=-1;
+				suma.resultado=0;
+				write(socket,&suma, sizeof(suma));//mando respuesta
+				
+		 }else{			 
+			   suma.resultado=suma.num1+suma.num2; 
+			   suma.flag=0;
+			   write(socket,&suma,sizeof(s_suma));
+		 }
+		 
+		   
 		  
 		 }    
 }
@@ -134,9 +141,10 @@ int esNumero(char palabra[]){
 	
 	for(int letra=0;letra<strlen(palabra);letra++){
 		if(palabra[0]=='-'){
+			
 			continue;
 		}else if(isdigit(palabra[letra])==0){
-											
+								
 						return -1;
 			  
 					}

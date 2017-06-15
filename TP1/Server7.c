@@ -128,8 +128,8 @@ void sig_chld(int signo){
  * Si se encuentra en alguna posición un no-digito retorna -1. Si la totalidad de las posiciones resultan tener digitos retorna 0.
  * **/
 int esNumero(char palabra[]){
-	
-	for(int letra=0;letra<strlen(palabra);letra++){
+	int letra;
+	for(letra=0;letra<strlen(palabra);letra++){
 		if(palabra[0]=='-'){
 			continue;
 		}else if(isdigit(palabra[letra])==0){

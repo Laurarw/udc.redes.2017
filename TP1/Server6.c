@@ -27,7 +27,7 @@ int main(void){
     struct sockaddr_in direcc;
    
     s = socket(AF_INET, SOCK_STREAM, 0);
-    if(s!=-1)printf("socket");
+    if(s!=-1)
 
     bzero((char *) &direcc, sizeof(direcc));
     direcc.sin_family = AF_INET;
