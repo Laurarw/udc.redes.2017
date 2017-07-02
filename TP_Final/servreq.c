@@ -22,13 +22,14 @@
 /*  Service an HTTP request  */
 
 int Service_Request(int conn) {
+	
+	
 
     struct ReqInfo  reqinfo;
     int             resource = 0;
 
     InitReqInfo(&reqinfo);
-
-    
+	
     /*  Get HTTP request  */
 
     if ( Get_Request(conn, &reqinfo) < 0 )

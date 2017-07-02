@@ -17,7 +17,7 @@
 #include <time.h>
  
 
-#define PORTNUM 8000
+#define PORTNUM 8080
 
 void servicio (){
 	 static char *argv[] = {NULL};
@@ -56,19 +56,46 @@ int main(int argc, char *argv[]){
      printf("-SERVIDOR ESCUCHANDO EN EL PUERTO %d-\n", PORTNUM);
      printf("---------------------------------------\n");
      
+     
      signal(SIGCHLD, sig_chld);
+ char buf[1000];
+ int p;
  
     while(1){   
  	
 		consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
 		//printf("Conexion desde %s\n", inet_ntoa(dest.sin_addr));
- 
+
 		if((pid = fork()) == 0 ){ 
-			close(mysocket);
+			
+			close(mysocket);			
  
+			//p=consocket;
+/*			while(p=read(consocket,buf,sizeof(buf))>0){
+				
+					puts("a");
+				
+				write(1,buf,sizeof(buf));
+				
+				break;
+			}
+	*/				puts("b");
+				
+			
 			dup2(consocket,0);
 			dup2(consocket,1);
+			//read(p,buf,sizeof(buf));
+			//printf("%s\n",buf);
+					puts("c");
+			
+			//fwrite( cadena, sizeof(char), sizeof(cadena), log );
+			//fwrite(consocket,sizeof(char),1000,log);
+			
+					puts("d");
+			
 			servicio();
+			
+			
 			close(consocket);
 			break;
 		}else{ 
