@@ -200,7 +200,7 @@ int Get_Request(int conn, struct ReqInfo * reqinfo) {
 	    Readline(conn, buffer, MAX_REQ_LINE - 1);
 	    
 	    Trim(buffer);
-	    printf("%s\n",buffer);
+//	    printf("%s\n",buffer);//Para imprimir en la consola del servidor la cabecera enviada por el cliente 
 
 	    if ( buffer[0] == '\0' )
 		break;
