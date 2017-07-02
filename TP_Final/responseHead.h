@@ -1,23 +1,11 @@
-/*
-
-  responseHead.H
-  ==========
-  (c) Copyright Paul Griffiths 1999
-  Email: mail@paulgriffiths.net
-
-  Interface to HTTP response header functions
-
-*/
-
-
 #ifndef PG_RESPHEAD_H
 #define PG_RESPHEAD_H
 
 
-#include "requestHead.h"          /*  for struct ReqInfo  */
+#include "requestHead.h"  /*  se incluye para conocer la estructura ReqInfo  */
 
 
-/*  Function prototypes  */
+/*  Declaracion de las funciones de responseHead  */
 
 int Output_HTTP_Headers(int conn, struct ReqInfo * reqinfo);
 

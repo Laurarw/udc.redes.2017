@@ -1,15 +1,3 @@
-/*
-
-  SERVREQ.C
-  =========
-  (c) Copyright Paul Griffiths 1999
-  Email: mail@paulgriffiths.net
-
-  Implementation of function to service requests.
-
-*/
-
-
 #include <stdio.h>
 #include <errno.h>
 
@@ -19,24 +7,26 @@
 #include "resource.h"
 
 
-/*  Service an HTTP request  */
+/*  Servicio request HTTP que brinda el servidor  */
 
 int Service_Request(int conn) {
 	
 	
 
-    struct ReqInfo  reqinfo;
+    struct ReqInfo  reqinfo;//Estructura de una cabecera request
     int             resource = 0;
 
-    InitReqInfo(&reqinfo);
+    InitReqInfo(&reqinfo);//inicializa la cabecera request
 	
-    /*  Get HTTP request  */
-
+    /*  Obtener request HTTP  */
     if ( Get_Request(conn, &reqinfo) < 0 )
 	return -1;
 
     
-    /*  Check whether resource exists, whether we have permission
+    /*  
+     * Verifica que exista el resourse, que tenga permisos de acceder a el...
+     * 
+     * Check whether resource exists, whether we have permission
 	to access it, and update status code accordingly.          */
 
     if ( reqinfo.status == 200 )
@@ -47,7 +37,8 @@ int Service_Request(int conn) {
 		reqinfo.status = 404;
 	}
 
-    /*  Output HTTP response headers if we have a full request  */
+    /*  
+     * Output HTTP response headers if we have a full request  */
 
     if ( reqinfo.type == FULL )
 	Output_HTTP_Headers(conn, &reqinfo);
@@ -69,7 +60,3 @@ int Service_Request(int conn) {
 
     return 0;
 }
-
-
-
-

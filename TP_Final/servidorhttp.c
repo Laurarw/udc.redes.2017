@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <sys/stat.h>   /* Biblioteca para se utilizar a struct stat para verificación de arquivos*/
-//#include <fcntl.h>      /* Biblioteca para se utilizar a funcion open()*/
+
 #include <sys/socket.h> /* Biblioteca que contiene definicoe de sockets*/
 #include <sys/wait.h>   /* Biblioteca para utillizar a função waitpid() */
 #include <sys/types.h>  /* Biblioteca contendo os tipos de socket */
@@ -36,7 +36,7 @@ void servicio (){
  
  
 int main(int argc, char *argv[]){
-  //puts("hola");
+
     struct sockaddr_in dest;  
     struct sockaddr_in serv;  
     int mysocket, consocket, pid; 
@@ -52,25 +52,29 @@ int main(int argc, char *argv[]){
     bind(mysocket, (struct sockaddr *)&serv, sizeof(struct sockaddr));
  
     listen(mysocket, 1);
-     printf("---------------------------------------\n");
-     printf("-SERVIDOR ESCUCHANDO EN EL PUERTO %d-\n", PORTNUM);
-     printf("---------------------------------------\n");
+    printf("---------------------------------------\n");
+    printf("-SERVIDOR ESCUCHANDO EN EL PUERTO %d-\n", PORTNUM);
+    printf("---------------------------------------\n");
      
      
-     signal(SIGCHLD, sig_chld);
- char buf[1000];
- int p;
+    signal(SIGCHLD, sig_chld);
+	//char buf[1000];
+	//int p;
  
     while(1){   
- 	
+		
+		//Se acepta la conexion y se establece el socket de atencion/hijo, este va a atender al cliente
 		consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
-		//printf("Conexion desde %s\n", inet_ntoa(dest.sin_addr));
-
+		
+		//si el socket es el hijo, entoces
 		if((pid = fork()) == 0 ){ 
 			
-			close(mysocket);			
+			close(mysocket);//se cierra el socket de escucha/padre			
  
-			//p=consocket;
+			/*Imprime en la consola del servidor la cabecera request/peticion que envia el cliente
+			  al socket de atencion
+			*/
+			
 /*			while(p=read(consocket,buf,sizeof(buf))>0){
 				
 					puts("a");
@@ -81,25 +85,16 @@ int main(int argc, char *argv[]){
 			}
 	*/				puts("b");
 				
+			/*Duplica el descriptor de archivo existente, en este caso consocket*/
+			dup2(consocket,0);//entrada estandard
+			dup2(consocket,1);//salida estandard
+			servicio();//llama al servicio
 			
-			dup2(consocket,0);
-			dup2(consocket,1);
-			//read(p,buf,sizeof(buf));
-			//printf("%s\n",buf);
-					puts("c");
-			
-			//fwrite( cadena, sizeof(char), sizeof(cadena), log );
-			//fwrite(consocket,sizeof(char),1000,log);
-			
-					puts("d");
-			
-			servicio();
-			
-			
+			//se cierra el socket de atencion
 			close(consocket);
 			break;
 		}else{ 
-			//printf("Conexion atendida por el hijo numero: %d\n", pid);
+			//se cierra el socket de atencion
 			close(consocket);
 		}
     }

@@ -1,20 +1,8 @@
-/*
-
-  REQHEAD.H
-  =========
-  (c) Copyright Paul Griffiths 1999
-  Email: mail@paulgriffiths.net
-
-  Interface to functions for manipulating HTTP request headers.
-
-*/
-
-
 #ifndef PG_REQHEAD_H
 #define PG_REQHEAD_H
 
 
-/*  User-defined data types  */
+/*  Tipos definidos por el usuario  */
 
 enum Req_Method { GET, HEAD, UNSUPPORTED };
 enum Req_Type   { SIMPLE, FULL };
@@ -29,12 +17,12 @@ struct ReqInfo {
 };
 
 
-/*  Global macros/variables  */
+/*  VAriables globales  */
 
 #define MAX_REQ_LINE         (1024)
 
 
-/*  Function prototypes  */
+/*  Declaracion de funciones de requestHead  */
 
 int  Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo);
 int  Get_Request      (int conn, struct ReqInfo * reqinfo);

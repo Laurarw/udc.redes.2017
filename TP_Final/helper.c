@@ -1,17 +1,3 @@
-/*
-
-  HELPER.C
-  ========
-  (c) Copyright Paul Griffiths 1999
-  Email: mail@paulgriffiths.net
-
-  Implementation of helper functions for simple web server.
-  The Readline() and Writeline() functions are shamelessly
-  ripped from "UNIX Network Programming" by W Richard Stevens.
-
-*/
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
@@ -20,7 +6,7 @@
 #include "helper.h"
 
 
-/*  Prints an error message and quits  */
+/*  Imprme un mensaje de error y se cierra  */
 
 void Error_Quit(char const * msg) {
     fprintf(stderr, "WEBSERV: %s\n", msg);
@@ -28,7 +14,7 @@ void Error_Quit(char const * msg) {
 }
 
  
-/*  Read a line from a socket  */
+/*  Se lee una linea del socket  */
 
 ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
     ssize_t n, rc;
@@ -62,7 +48,7 @@ ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
 }
 
 
-/*  Write a line to a socket  */
+/*  Escribir una linea en el socket  */
 
 ssize_t Writeline(int sockd, const void *vptr, size_t n) {
     size_t      nleft;
@@ -87,7 +73,7 @@ ssize_t Writeline(int sockd, const void *vptr, size_t n) {
 }
 
 
-/*  Removes trailing whitespace from a string  */
+/*  Remueve los espacio en blanco de un string */
 
 int Trim(char * buffer) {
     int n = strlen(buffer) - 1;
@@ -99,7 +85,7 @@ int Trim(char * buffer) {
 }
 
 
-/*  Converts a string to upper-case  */
+/*  Convierte un string en upper-case  */
     
 int StrUpper(char * buffer) {
     while ( *buffer ) {
@@ -110,7 +96,7 @@ int StrUpper(char * buffer) {
 }
 
 
-/*  Cleans up url-encoded string  */
+/*  Limpia el url-encoded de un string  */
 	
 void CleanURL(char * buffer) {
     char asciinum[3] = {0};

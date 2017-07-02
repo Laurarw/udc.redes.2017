@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <sys/stat.h>   /* Biblioteca para se utilizar a struct stat para verificación de arquivos*/
-//#include <fcntl.h>      /* Biblioteca para se utilizar a funcion open()*/
+
 #include <sys/socket.h> /* Biblioteca que contiene definicoe de sockets*/
 #include <sys/wait.h>   /* Biblioteca para utillizar a função waitpid() */
 #include <sys/types.h>  /* Biblioteca contendo os tipos de socket */

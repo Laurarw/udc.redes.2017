@@ -1,15 +1,3 @@
-/*
-
-  requestHead.C
-  =========
-  (c) Copyright Paul Griffiths 1999
-  Email: mail@paulgriffiths.net
-
-  Implementation of functions to manipulate HTTP request headers.
-
-*/
-
-
 #include <sys/time.h>             /*  For select()  */
 
 #include <stdlib.h>
@@ -22,8 +10,7 @@
 #include "helper.h"
 
 
-/*  Parses a string and updates a request
-    information structure if necessary.    */
+/* Convierte en una cadena(string) el requerimiento   */
 
 int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 
@@ -35,36 +22,38 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 
     if ( first_header == 1 ) {
 
-	/*  If first_header is 0, this is the first line of
+	/* Si la primera cabecera es 0 entonces es la primera linea del request HTTP
+	 *  
+	 * If first_header is 0, this is the first line of
 	    the HTTP request, so this should be the request line.  */
 
 
-	/*  Get the request method, which is case-sensitive. This
-	    version of the server only supports the GET and HEAD
-	    request methods.                                        */
+	/*  Se fija que metodo se envia en el requerimiento.
+	 * El servidor solo soporta los metodos GET Y HEAD
+	 */
 
-	if ( !strncmp(buffer, "GET ", 4) ) {
-	    reqinfo->method = GET;
-	    buffer += 4;
+	if ( !strncmp(buffer, "GET ", 4) ) {//Si el metodo es GET 
+	    reqinfo->method = GET;//guarda en el method de la estructura reqinfo que es GET
+	    buffer += 4;//y se desplaza hasta la pocicion 4 del buffer
 	}
-	else if ( !strncmp(buffer, "HEAD ", 5) ) {
-	    reqinfo->method = HEAD;
-	    buffer += 5;
+	else if ( !strncmp(buffer, "HEAD ", 5) ) {//Si el metodo es HEAD
+	    reqinfo->method = HEAD;//guarda en el method de la estructura reqinfo que es HEAD
+	    buffer += 5;//y se desplaza hasta la pocision 5 del buffer
 	}
-	else {
-	    reqinfo->method = UNSUPPORTED;
-	    reqinfo->status = 501;
-	    return -1;
+	else {//Si el metodo no es ninguno de los soportados entonces
+	    reqinfo->method = UNSUPPORTED;//se guarda en el method del reqinfo que es UNNSOPORTED(no soportado)
+	    reqinfo->status = 501;//y el status del reqinfo pasa a ser 501
+	    return -1;//provocando que se le devuelva al cliente el error 501 de metodo no soportado
 	}
 
 
-	/*  Skip to start of resource  */
+	/*  Recorre hasta el inicio del recurso  */
 
 	while ( *buffer && isspace(*buffer) )
 	    buffer++;
 
 
-	/*  Calculate string length of resource...  */
+	/* Calcula la longitud del nombre del recurso... */
 
 	endptr = strchr(buffer, ' ');
 	if ( endptr == NULL )
@@ -76,20 +65,24 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 	    return -1;
 	}
 
-	/*  ...and store it in the request information structure.  */
+	/*  ...Y lo guarda en el resource de la estructura de informacion del requerimiento.  */
 
 	reqinfo->resource = calloc(len + 1, sizeof(char));
 	strncpy(reqinfo->resource, buffer, len);
 
 	
-	/*  Test to see if we have any HTTP version information.
-	    If there isn't, this is a simple HTTP request, and we
-	    should not try to read any more headers. For simplicity,
-	    we don't bother checking the validity of the HTTP version
-	    information supplied - we just assume that if it is
-	    supplied, then it's a full request.                        */
+	/* Prueba ver si hay alguna informacion de la version HTTP 
+	 * Si no la hay entonces es un SIMPLE requerimiento HTTP, y no lee mas headers
+	   Por simplicidad no se verifica si es valida la version de HTTP, 
+	   se  asume que si se le pone la version entonces es un request FULL
+	   
+	   For simplicity, we don't bother checking the validity of the HTTP version
+	   information supplied - we just assume that if it is
+	   supplied, then it's a full request.                        */
 
 	if ( strstr(buffer, "HTTP/") )
+	/*Ver si poniendo esto solo manda http version 1.0
+	 * if ( strstr(buffer, "HTTP/1.0") )*/
 	    reqinfo->type = FULL;
 	else
 	    reqinfo->type = SIMPLE;
@@ -99,8 +92,7 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
     }
 
 
-    /*  If we get here, we have further headers aside from the
-	request line to parse, so this is a "full" HTTP request.  */
+    /*  Si es HTTP FULL entonces sigue leyendo la cabecera del requerimiento.  */
 
     /*  HTTP field names are case-insensitive, so make an
 	upper-case copy of the field name to aid comparison.
@@ -150,7 +142,8 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 }
 
 
-/*  Gets request headers. A CRLF terminates a HTTP header line,
+/* Obtiene los headers del request 
+ * Gets request headers. A CRLF terminates a HTTP header line,
     but if one is never sent we would wait forever. Therefore,
     we use select() to set a maximum length of time we will
     wait for the next complete header. If we timeout before
@@ -164,7 +157,7 @@ int Get_Request(int conn, struct ReqInfo * reqinfo) {
     struct timeval tv;
 
 
-    /*  Set timeout to 5 seconds  */
+    /*  Set timeout to 10 seconds  */
 
     tv.tv_sec  = 10;
     tv.tv_usec = 0;
@@ -205,8 +198,9 @@ int Get_Request(int conn, struct ReqInfo * reqinfo) {
 	    /*  We have an input line waiting, so retrieve it  */
 
 	    Readline(conn, buffer, MAX_REQ_LINE - 1);
-	    Trim(buffer);
 	    
+	    Trim(buffer);
+	    printf("%s\n",buffer);
 
 	    if ( buffer[0] == '\0' )
 		break;
@@ -220,7 +214,7 @@ int Get_Request(int conn, struct ReqInfo * reqinfo) {
 }
 
 
-/*  Initialises a request information structure  */
+/*  Inicializacion de la estructura de informacion del requerimiento */
 
 void InitReqInfo(struct ReqInfo * reqinfo) {
     reqinfo->useragent = NULL;
@@ -231,7 +225,7 @@ void InitReqInfo(struct ReqInfo * reqinfo) {
 }
 
 
-/*  Frees memory allocated for a request information structure  */
+/*  Liberar la memoria asignada a la estructura de informacion del requerimiento */
 
 void FreeReqInfo(struct ReqInfo * reqinfo) {
     if ( reqinfo->useragent )
