@@ -155,10 +155,11 @@ ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
 		if ( (rc = read(sockd, &c, 1)) == 1 ) {
 			*buffer++ = c;
 			if ( c == '\n' ){
-				strcat(b,c);
-				/*write(1,"\n",1);*/
+				/*strcat(b,c);*/
+
+				write(1,"\n",1);
 				break;
-			}/*write(1,c,1);*/
+			}write(1,c,1);
 		}
 		else if ( rc == 0 ) {
 			if ( n == 1 )
@@ -172,7 +173,7 @@ ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
 			Error_Quit("Error in Readline()");
 		}
     }
-	write(1,b,n);
+	/*write(1,b,n);*/
     *buffer = 0;
     return n;
 }
