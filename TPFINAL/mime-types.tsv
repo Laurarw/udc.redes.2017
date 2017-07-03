@@ -1,8 +1,10 @@
-12
+14
 html text/html
+htm text/html
 js application/javascript
 json application/json
 jpg image/jpeg
+jpeg image/jpeg
 txt text/plain
 mpg video/mpeg
 png image/png
