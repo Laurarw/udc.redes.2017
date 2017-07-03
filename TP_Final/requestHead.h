@@ -1,7 +1,7 @@
 #ifndef PG_REQHEAD_H
 #define PG_REQHEAD_H
 
-
+#include <unistd.h>   
 /*  Tipos definidos por el usuario  */
 
 enum Req_Method { GET, HEAD, UNSUPPORTED };
@@ -28,5 +28,5 @@ int  Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo);
 int  Get_Request      (int conn, struct ReqInfo * reqinfo);
 void InitReqInfo      (struct ReqInfo * reqinfo);
 void FreeReqInfo      (struct ReqInfo * reqinfo);
-
+ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen);
 #endif  /*  PG_REQHEAD_H  */

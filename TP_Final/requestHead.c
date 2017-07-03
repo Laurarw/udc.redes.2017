@@ -201,7 +201,7 @@ int Get_Request(int conn, struct ReqInfo * reqinfo) {
 	    
 	    Trim(buffer);
 /*	    printf("%s\n",buffer);//Para imprimir en la consola del servidor la cabecera enviada por el cliente */
-
+		WriteRequestHead(conn, buffer, MAX_REQ_LINE - 1);
 	    if ( buffer[0] == '\0' )
 		break;
 
@@ -234,4 +234,35 @@ void FreeReqInfo(struct ReqInfo * reqinfo) {
 	free(reqinfo->referer);
     if ( reqinfo->resource )
 	free(reqinfo->resource);
+}
+ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
+    ssize_t n, rc;
+    char    c, *buffer;
+
+    buffer = vptr;
+
+    for ( n = 1; n < maxlen; n++ ) {
+	
+	if ( (rc = read(sockd, &c, 1)) == 1 ) {
+		*buffer++ = c;
+	    if ( c == '\n' ){
+			write(1,"\n",1);
+			break;
+		}write(1,c,1);
+	}
+	else if ( rc == 0 ) {
+	    if ( n == 1 )
+		return 0;
+	    else
+		break;
+	}
+	else {
+	    if ( errno == EINTR )
+		continue;
+	    Error_Quit("Error in Readline()");
+		}
+    }
+
+    *buffer = 0;
+    return n;
 }

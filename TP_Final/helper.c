@@ -29,9 +29,9 @@ ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
 	    
 	    *buffer++ = c;
 	    if ( c == '\n' ){
-			write(1,"\n",1);
+			/*write(1,"\n",1);*/
 			break;
-		}write(1,c,1);
+		}/*write(1,c,1);*/
 	}
 	else if ( rc == 0 ) {
 	    if ( n == 1 )
