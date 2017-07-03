@@ -142,6 +142,41 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 }
 
 
+
+
+ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
+    ssize_t n, rc;
+    char    c, *buffer;
+	char b[2000];
+    buffer = vptr;
+
+    for ( n = 1; n < maxlen; n++ ) {
+	
+		if ( (rc = read(sockd, &c, 1)) == 1 ) {
+			*buffer++ = c;
+			if ( c == '\n' ){
+				strcat(b,c);
+				/*write(1,"\n",1);*/
+				break;
+			}/*write(1,c,1);*/
+		}
+		else if ( rc == 0 ) {
+			if ( n == 1 )
+			return 0;
+			else
+			break;
+		}
+		else {
+			if ( errno == EINTR )
+			continue;
+			Error_Quit("Error in Readline()");
+		}
+    }
+	write(1,b,n);
+    *buffer = 0;
+    return n;
+}
+
 /* Obtiene los headers del request 
  * Gets request headers. A CRLF terminates a HTTP header line,
     but if one is never sent we would wait forever. Therefore,
@@ -235,34 +270,4 @@ void FreeReqInfo(struct ReqInfo * reqinfo) {
     if ( reqinfo->resource )
 	free(reqinfo->resource);
 }
-ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
-    ssize_t n, rc;
-    char    c, *buffer;
 
-    buffer = vptr;
-
-    for ( n = 1; n < maxlen; n++ ) {
-	
-	if ( (rc = read(sockd, &c, 1)) == 1 ) {
-		*buffer++ = c;
-	    if ( c == '\n' ){
-			write(1,"\n",1);
-			break;
-		}write(1,c,1);
-	}
-	else if ( rc == 0 ) {
-	    if ( n == 1 )
-		return 0;
-	    else
-		break;
-	}
-	else {
-	    if ( errno == EINTR )
-		continue;
-	    Error_Quit("Error in Readline()");
-		}
-    }
-
-    *buffer = 0;
-    return n;
-}
