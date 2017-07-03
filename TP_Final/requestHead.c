@@ -146,7 +146,7 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 
 ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
     ssize_t n, rc;
-    char    c[2], *buffer;
+    char    c[1], *buffer;
 	char b[2000];
     buffer = vptr;
 
