@@ -153,13 +153,15 @@ ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
     for ( n = 1; n < maxlen; n++ ) {
 	
 		if ( (rc = read(sockd, &c, 1)) == 1 ) {
+printf("lalala\t°-°\n");
 			*buffer++ = c;
 			if ( c == '\n' ){
-				/*strcat(b,c);*/
+				strcat(b,c);
+				/*write(1,"\n",1);*/
 
-				write(1,"\n",1);
+				
 				break;
-			}write(1,c,1);
+			}/*write(1,c,1);*/
 		}
 		else if ( rc == 0 ) {
 			if ( n == 1 )
@@ -168,7 +170,7 @@ ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
 			break;
 		}
     }
-	/*write(1,b,n);*/
+	write(1,b,n);
     *buffer = 0;
     return n;
 }
