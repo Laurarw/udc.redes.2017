@@ -1,3 +1,13 @@
+/*
+ * SERVIDOR.H
+   ===========
+ * 
+ * 
+ * Biblioteca contiene las funciones referentes al manejo interno del servidor.
+ * 
+ * */
+
+
 #ifndef _SERVIDOR_H_
 #define _SERVIDOR_H_
 
@@ -19,7 +29,9 @@
 #define N 500
 #define TAM 90000000
 
+/* prototipo de funciones*/
 void sig_chld(int signo);
 void servicio ();
+
 
 #endif

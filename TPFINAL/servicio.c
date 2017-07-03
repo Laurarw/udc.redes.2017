@@ -1,6 +1,13 @@
 
 #include "servicio.h"
 
+
+
+/*	Función que encuntra el Content-Type
+	Parametros:
+	name= es el nombre del archivo+su extencion
+	Return:
+	el nombre del Conten-Type. Ejemplo: txt/html*/
 char * get_mime_type(char *name) {
 	char *ext = strrchr(name, '.');
   char delimiters[] = " ";
@@ -35,6 +42,14 @@ char * get_mime_type(char *name) {
 	return mime_type;
 }
 
+
+/*	Función que evalua el codigo del respuesta a un resquest.
+	Parametros:
+	metodo= es el metodo del resquest. Ejemplo GET, HEAD,etc
+	recursos=nombre del archivo del request. Ejemplo: /index.html
+	protocolo=la versión del protocolo del request
+	Return:
+	el valor del codigo correspondiente a cada caso. Ejemplo: 200, 501,etc.*/
 int evaluandoPeticion(char metodo[5], char recurso[50], char protocolo[9])
 {
         FILE *archivo = NULL;

@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         //Espera la finalizacion del hijo
         signal(SIGCHLD, sig_chld);
        
-        //Reusa el puerto
+        //funcion que no deja que el socket se bloquee si ocurre algun error
         setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &freepuerto, sizeof(freepuerto));
        
         //comienza el bucle infinito
@@ -67,8 +67,9 @@ int main(int argc, char *argv[])
                                         break;                              
                                 case 0:                                     
                                         close(s);
+                                        //se le asigna al cliente la entrada estandar
                                         dup2(ns, 0);
-										//dup2(ns, 1);  //Crar un nuevo handle a partir de otro existente. El nuevo tiene en común con el antiguo: fichero asociado; fp, y modo de acceso.
+										//dup2(ns, 1); no lo agregamos porque no interesaba que nos mostraran por pantalla las cosas
                                         servicio();
                                         close(ns);
                                         exit(0);
