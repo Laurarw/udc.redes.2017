@@ -15,7 +15,6 @@
  
 #include "servidor.h"
 
-/*Main principal del servidor http*/
 int main(int argc, char *argv[])
 {      
         pid_t hijo;
@@ -29,6 +28,7 @@ int main(int argc, char *argv[])
         direcc.sin_family = AF_INET;/*Protocolo de la conexion*/
         direcc.sin_port = htons(PUERTO);/*Puerto para la conexion*/
         direcc.sin_addr.s_addr = htonl(INADDR_ANY);/*Direccion IP del host*/
+
         //Fin-Seteando socket
        
         len = sizeof(struct sockaddr_in);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
         }
        
         printf("---------------------------------------\n");
-        printf("-SERVIDOR ESCUCHANDO EN EL PUERTO %d-\n", PUERTO);
+        printf("-SERVIDOR: %s ESCUCHANDO EN EL PUERTO %d-\n",SERVE, PUERTO);
         printf("---------------------------------------\n");
        
         //Espera la finalizacion del hijo
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         //comienza el bucle infinito
         while(1)
         {
-                ns = accept(s, (struct sockaddr*) &direcc, &len);/*Se acepta una nueva conexion de un cliente y se atiende en el nuevo socket*/
+                ns = accept(s, (struct sockaddr*) &direcc, &len);
                
                 printf("\nConnection from: %s\n", inet_ntoa(direcc.sin_addr));
                
@@ -67,13 +67,13 @@ int main(int argc, char *argv[])
                                 case -1: 
                                         printf("Error en fork\n");     
                                         break;                              
-                                case 0:/*Socket de atencion(hijo)*/                                     
+                                case 0: /*Socket de atencion(hijo)*/                                     
                                         close(s);/*Se cierra el socket de escucha(padre)*/
                                         //se le asigna al cliente la entrada estandar
                                         dup2(ns, 0);
 										//dup2(ns, 1); no lo agregamos porque no interesaba que nos mostraran por pantalla las cosas
                                         servicio();/*Llamamos al servicio que se encuentra en servidor.c*/
-                                        close(ns);
+                                        close(ns);/*Se cierra el socket de atencion(hijo)*/
                                         exit(0);
                                 default:
                                         close(ns);                                                              

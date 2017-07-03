@@ -7,7 +7,6 @@
  * 
  * */
 
-
 #ifndef _SERVIDOR_H_
 #define _SERVIDOR_H_
 
@@ -26,9 +25,9 @@
 #include <time.h>
 
 /*Definicion de variables globales*/
+#define SERVE "LBJ web"
 #define PUERTO 8000/*Numero de puerto que va a usar el servidor*/
-#define N 500/*numero*/
-#define TAM 90000000/*Tamanio maximo*/
+
 
 /*	Declaracion de funciones proporcionadas por el servidor */
 void sig_chld(int signo);

@@ -1,5 +1,5 @@
 /*
- * SERVIDORHTTP.c
+ * SERVICIOHTTP.c
  * ==============
  * 
  * Main principal del servicio proporcionado por el servidor.
@@ -102,12 +102,11 @@ int main(void)
                         case 200:
                                         bzero(punto,sizeof(punto));
                                         punto[0] = '.';
-                                        strcat(punto,objeto);
-                                        printf("\nPUNTOOOOOOOOO%s",punto);
+                                        strcat(punto,objeto);                                        
                                         *mime = get_mime_type(objeto);
                                         fp = fopen(punto,"rb");
                                         i = fread(pagina,sizeof(char),TAM,fp);
-                                        sprintf(cabecera,"%s 200 OK\r\nContent-Type: %s \r\nContent-Length: %d\r\nContent-Language: es\r\nServer: UDC\r\nDate: %s\r\n\r\n", version, *mime,i,output);                                        
+                                        sprintf(cabecera,"%s 200 OK\r\nContent-Type: %s \r\nContent-Length: %d\r\nContent-Language: es\r\nServer: %s\r\nDate: %s\r\n\r\n", version, *mime,i,SERVE,output);                                        
                                 
                                 break;
                          /*	HTTP_VERSION_NOT_SUPPORTED*/
@@ -115,7 +114,7 @@ int main(void)
 										fp = fopen("./505.html","rb");
                                         i = fread(pagina,1,sizeof(pagina),fp);
                                         tamanio = strlen(pagina);      
-                                        sprintf(cabecera,"%s 505 HTTP version not supported\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: UDC\r\nDate: %s\r\n\r\n", version,tamanio,output);
+                                        sprintf(cabecera,"%s 505 HTTP version not supported\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: %s\r\nDate: %s\r\n\r\n", version,tamanio,SERVE,output);
                                  break;
                          /* NOT_FOUND	*/
 				
@@ -123,21 +122,21 @@ int main(void)
                                         fp = fopen("./404.html","rb");
                                         i = fread(pagina,1,sizeof(pagina),fp);
                                         tamanio = strlen(pagina);
-                                        sprintf(cabecera,"%s 404 NotFound\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: UDC\r\nDate: %s\r\n\r\n", version,tamanio,output);
+                                        sprintf(cabecera,"%s 404 NotFound\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: %s\r\nDate: %s\r\n\r\n", version,tamanio,SERVE,output);
                                 break;
                         /*	NOT_IMPLEMENTED*/
                         case 501:
                                         fp = fopen("./501.html","rb");
                                         i = fread(pagina,1,sizeof(pagina),fp);
                                         tamanio = strlen(pagina);
-                                        sprintf(cabecera,"%s 501 NotImplement\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: UDC\r\nDate: %s\r\n\r\n", version,tamanio,output);
+                                        sprintf(cabecera,"%s 501 NotImplement\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: %s\r\nDate: %s\r\n\r\n", version,tamanio,SERVE,output);
                                 break;
                          /*	BAD_REQUEST*/
                          default:
 										fp = fopen("./400.html","rb");
                                         i = fread(pagina,1,sizeof(pagina),fp);
                                         tamanio = strlen(pagina);
-                                        sprintf(cabecera,"HTTP/1.0 400 Bad Request\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: UDC\r\nDate: %s\r\n\r\n",tamanio,output);
+                                        sprintf(cabecera,"HTTP/1.0 400 Bad Request\r\nContent-Type: text/html\r\nContent-Length: %d\r\nContent-Language: es\r\nServer: %s\r\nDate: %s\r\n\r\n",tamanio,SERVE,output);
                                 break;
                 }
                 /*	Muestro por pantalla la cabecera enviada*/
