@@ -42,6 +42,7 @@ int Service_Request(int conn) {
 
     if ( reqinfo.type == FULL )
 	Output_HTTP_Headers(conn, &reqinfo);
+//Output_HTTP_Headers(conn, resource, &reqinfo)
 
 
     /*  Service the HTTP request  */

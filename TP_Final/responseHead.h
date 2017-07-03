@@ -8,6 +8,7 @@
 /*  Declaracion de las funciones de responseHead  */
 
 int Output_HTTP_Headers(int conn, struct ReqInfo * reqinfo);
+//int Output_HTTP_Headers(int conn, int resource, struct ReqInfo * reqinfo);
 
 
 #endif  /*  PG_RESPHEAD_H  */

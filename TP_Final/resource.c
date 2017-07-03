@@ -17,7 +17,22 @@
 
 static char server_root[1000] = "/home/usuario/Escritorio/webserv";
 
+/*
+ * */
+/*int Length_Resource (int conn, int resource, struct ReqInfo * reqinfo){
 
+    char c;
+    int  i;
+	int contador=0;
+    while ( (i = read(resource, &c, 1)) ) {//lee el recurso
+		if ( i < 0 )//si i es menor a 0 lanza un error de lectura
+			Error_Quit("Error reading from file.");
+		contador++;
+	}
+
+    return contador;//retorna 0 si no hubo ningun error
+}
+ * */
 /* Funcion que devuelve el recurso(resource)  */
 
 int Return_Resource(int conn, int resource, struct ReqInfo * reqinfo) {
