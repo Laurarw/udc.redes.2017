@@ -146,7 +146,7 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 
 ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
     ssize_t n, rc;
-    char    c, *buffer;
+    char    c[2], *buffer;
 	char b[2000];
     buffer = vptr;
 
@@ -166,11 +166,6 @@ ssize_t WriteRequestHead(int sockd, void *vptr, size_t maxlen) {
 			return 0;
 			else
 			break;
-		}
-		else {
-			if ( errno == EINTR )
-			continue;
-			Error_Quit("Error in Readline()");
 		}
     }
 	/*write(1,b,n);*/
