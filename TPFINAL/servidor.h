@@ -25,11 +25,11 @@
 #include <time.h>
 
 /*Definicion de variables globales*/
-#define SERVE "LBJ web"
+#define SERVE "LBJ web"/*Nombre del servidor*/
 #define PUERTO 8000/*Numero de puerto que va a usar el servidor*/
 
 
-/*	Declaracion de funciones proporcionadas por el servidor */
+/*	Declaracion de funciones proporcionadas por el servidor */d
 void sig_chld(int signo);
 void servicio ();
 
