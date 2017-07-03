@@ -58,18 +58,18 @@ int main(int argc, char *argv[]){
      
      
     signal(SIGCHLD, sig_chld);
-	//char buf[1000];
-	//int p;
+	/*char buf[1000];
+	int p;*/
  
     while(1){   
 		
-		//Se acepta la conexion y se establece el socket de atencion/hijo, este va a atender al cliente
+		/*Se acepta la conexion y se establece el socket de atencion/hijo, este va a atender al cliente*/
 		consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
 		
-		//si el socket es el hijo, entoces
+		/*si el socket es el hijo, entoces*/
 		if((pid = fork()) == 0 ){ 
 			
-			close(mysocket);//se cierra el socket de escucha/padre			
+			close(mysocket);/*se cierra el socket de escucha/padre*/			
  
 			/*Imprime en la consola del servidor la cabecera request/peticion que envia el cliente
 			  al socket de atencion
@@ -86,28 +86,18 @@ int main(int argc, char *argv[]){
 	*/				puts("b");
 				
 			/*Duplica el descriptor de archivo existente, en este caso consocket*/
-			dup2(consocket,0);//entrada estandard
-			dup2(consocket,1);//salida estandard
-			servicio();//llama al servicio
+			dup2(consocket,0);/*entrada estandard*/
+			dup2(consocket,1);/*salida estandard*/
+			servicio();/*llama al servicio*/
 			
-			//se cierra el socket de atencion
+			/*se cierra el socket de atencion*/
 			close(consocket);
 			break;
 		}else{ 
-			//se cierra el socket de atencion
+			/*se cierra el socket de atencion*/
 			close(consocket);
 		}
     }
  
     exit(0);
 }
-
-
-
-
- 
-
- 
-
- 
- 

@@ -32,18 +32,18 @@ int Parse_HTTP_Header(char * buffer, struct ReqInfo * reqinfo) {
 	 * El servidor solo soporta los metodos GET Y HEAD
 	 */
 
-	if ( !strncmp(buffer, "GET ", 4) ) {//Si el metodo es GET 
-	    reqinfo->method = GET;//guarda en el method de la estructura reqinfo que es GET
-	    buffer += 4;//y se desplaza hasta la pocicion 4 del buffer
+	if ( !strncmp(buffer, "GET ", 4) ) {/*Si el metodo es GET */
+	    reqinfo->method = GET;/*guarda en el method de la estructura reqinfo que es GET*/
+	    buffer += 4;/*y se desplaza hasta la pocicion 4 del buffer*/
 	}
-	else if ( !strncmp(buffer, "HEAD ", 5) ) {//Si el metodo es HEAD
-	    reqinfo->method = HEAD;//guarda en el method de la estructura reqinfo que es HEAD
-	    buffer += 5;//y se desplaza hasta la pocision 5 del buffer
+	else if ( !strncmp(buffer, "HEAD ", 5) ) {/*Si el metodo es HEAD*/
+	    reqinfo->method = HEAD;/*guarda en el method de la estructura reqinfo que es HEAD*/
+	    buffer += 5;/*y se desplaza hasta la pocision 5 del buffer*/
 	}
-	else {//Si el metodo no es ninguno de los soportados entonces
-	    reqinfo->method = UNSUPPORTED;//se guarda en el method del reqinfo que es UNNSOPORTED(no soportado)
-	    reqinfo->status = 501;//y el status del reqinfo pasa a ser 501
-	    return -1;//provocando que se le devuelva al cliente el error 501 de metodo no soportado
+	else {/*Si el metodo no es ninguno de los soportados entonces*/
+	    reqinfo->method = UNSUPPORTED;/*se guarda en el method del reqinfo que es UNNSOPORTED(no soportado)*/
+	    reqinfo->status = 501;/*y el status del reqinfo pasa a ser 501*/
+	    return -1;/*provocando que se le devuelva al cliente el error 501 de metodo no soportado*/
 	}
 
 
@@ -200,7 +200,7 @@ int Get_Request(int conn, struct ReqInfo * reqinfo) {
 	    Readline(conn, buffer, MAX_REQ_LINE - 1);
 	    
 	    Trim(buffer);
-//	    printf("%s\n",buffer);//Para imprimir en la consola del servidor la cabecera enviada por el cliente 
+/*	    printf("%s\n",buffer);//Para imprimir en la consola del servidor la cabecera enviada por el cliente */
 
 	    if ( buffer[0] == '\0' )
 		break;

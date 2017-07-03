@@ -13,10 +13,10 @@ int Service_Request(int conn) {
 	
 	
 
-    struct ReqInfo  reqinfo;//Estructura de una cabecera request
+    struct ReqInfo  reqinfo;/*Estructura de una cabecera request*/
     int             resource = 0;
 
-    InitReqInfo(&reqinfo);//inicializa la cabecera request
+    InitReqInfo(&reqinfo);/*inicializa la cabecera request*/
 	
     /*  Obtener request HTTP  */
     if ( Get_Request(conn, &reqinfo) < 0 )
@@ -42,7 +42,7 @@ int Service_Request(int conn) {
 
     if ( reqinfo.type == FULL )
 	Output_HTTP_Headers(conn, &reqinfo);
-//Output_HTTP_Headers(conn, resource, &reqinfo)
+/*Output_HTTP_Headers(conn, resource, &reqinfo);*/
 
 
     /*  Service the HTTP request  */

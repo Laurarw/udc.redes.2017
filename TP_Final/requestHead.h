@@ -17,7 +17,7 @@ struct ReqInfo {
 };
 
 
-/*  VAriables globales  */
+/*  Variables globales  */
 
 #define MAX_REQ_LINE         (1024)
 

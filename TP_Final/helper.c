@@ -25,7 +25,7 @@ ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
     for ( n = 1; n < maxlen; n++ ) {
 	
 	if ( (rc = read(sockd, &c, 1)) == 1 ) {
-		printf("%c",c);//Imprime el caracter en consola
+		printf("%c",c);/*Imprime el caracter en consola*/
 	    *buffer++ = c;
 	    if ( c == '\n' )
 		break;

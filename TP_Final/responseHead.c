@@ -9,7 +9,7 @@
 /*  Crea la cabecera de respuesta(respose) HTTP */
 
 int Output_HTTP_Headers(int conn, struct ReqInfo * reqinfo) {
-//int Output_HTTP_Headers(int conn, int resource, struct ReqInfo * reqinfo)
+/*int Output_HTTP_Headers(int conn, int resource, struct ReqInfo * reqinfo){*/
     char buffer[100];
 
     sprintf(buffer, "HTTP/1.0 %d OK\r\n", reqinfo->status);
@@ -17,14 +17,15 @@ int Output_HTTP_Headers(int conn, struct ReqInfo * reqinfo) {
 
     Writeline(conn, "Server: PGWebServ v0.1\r\n", 27);
     Writeline(conn, "Content-Type: text/html\r\n", 28);
-//	
-//recorre el reqinfo->resource hasta que llega al .tipo_de_archivo
-//entonces manda ese content type 
-/*
-  //Se define el tipo de contenido de la respuesta 
-  //Recorriendo el reqinfo->resource hasta que llega al .tipo_de_archivo
-  
-  if ((strstr(reqinfo->resource, ".html"))||( strstr(reqinfo->resource, ".htm") )){//si el recurso es .html o .htm
+	
+/*recorre el reqinfo->resource hasta que llega al .tipo_de_archivo
+	entonces manda ese content type */
+
+
+  /*Se define el tipo de contenido de la respuesta 
+  Recorriendo el reqinfo->resource hasta que llega al .tipo_de_archivo
+  */
+/*  if ((strstr(reqinfo->resource, ".html"))||( strstr(reqinfo->resource, ".htm") )){//si el recurso es .html o .htm
   		Writeline(conn, "Content-Type: text/html\r\n", 28);// entonces el Content-Type vale text/html
   
   }else if(strstr(reqinfo->resource, ".txt")){//si el recurso es .txt
@@ -46,7 +47,7 @@ int Output_HTTP_Headers(int conn, struct ReqInfo * reqinfo) {
  * */
 
 
-//Poner el Content-length
+/*Poner el Content-length*/
 
 
 /* Obtine el tamaño del recurso*/
@@ -54,11 +55,10 @@ int Output_HTTP_Headers(int conn, struct ReqInfo * reqinfo) {
 /* int tamanio;
   char cadena[1000];
   tamanio=Length_Resource (conn, resource, &reqinfo);
-  //Content-length
-  sprintf(cadena, "Content-Length: %d\r\n",tamanio);
-   Writeline(conn, cadena, strlen(cadena));//se agrega el content-length a la cabecera
+  /*Content-length*/
+ /* sprintf(cadena, "Content-Length: %d\r\n",tamanio);
+   Writeline(conn, cadena, strlen(cadena));/*se agrega el content-length a la cabecera*/
 
- * */
     Writeline(conn, "\r\n", 2);
 
     return 0;
