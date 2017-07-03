@@ -3,7 +3,7 @@
    ===========
  * 
  * 
- * Biblioteca contiene las funciones referentes al manejo interno del servidor.
+ * Biblioteca que contiene las funciones referentes al manejo interno del servidor.
  * 
  * */
 
@@ -25,11 +25,12 @@
 #include <sys/wait.h>
 #include <time.h>
 
-#define PUERTO 8000
-#define N 500
-#define TAM 90000000
+/*Definicion de variables globales*/
+#define PUERTO 8000/*Numero de puerto que va a usar el servidor*/
+#define N 500/*numero*/
+#define TAM 90000000/*Tamanio maximo*/
 
-/* prototipo de funciones*/
+/*	Declaracion de funciones proporcionadas por el servidor */
 void sig_chld(int signo);
 void servicio ();
 
